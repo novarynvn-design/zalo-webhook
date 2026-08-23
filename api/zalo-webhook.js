@@ -25,8 +25,11 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
           "X-Bridge-Secret": process.env.BRIDGE_SECRET
-        },
-        body: JSON.stringify(req.body)
+        body: JSON.stringify({
+          bridge_secret:
+        process.env.BRIDGE_SECRET,
+          zalo_data: req.body
+        })
       }
     );
 

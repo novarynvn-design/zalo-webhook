@@ -7,10 +7,14 @@ export default async function handler(req, res) {
     });
   }
 
-  // Secret từ Zalo
-  const zaloSecret = req.headers["x-bot-api-secret-token"];
+  // Kiểm tra Secret từ Zalo
+  const zaloSecret =
+    req.headers["x-bot-api-secret-token"];
 
-  if (zaloSecret !== process.env.ZALO_SECRET_TOKEN) {
+  if (
+    zaloSecret !==
+    process.env.ZALO_SECRET_TOKEN
+  ) {
     return res.status(401).json({
       ok: false,
       error: "Unauthorized"
@@ -22,32 +26,40 @@ export default async function handler(req, res) {
       process.env.GOOGLE_APPS_SCRIPT_URL,
       {
         method: "POST",
+
         headers: {
-          "Content-Type": "application/json",
-          "X-Bridge-Secret": process.env.BRIDGE_SECRET
+          "Content-Type": "application/json"
+        },
+
         body: JSON.stringify({
           bridge_secret:
-        process.env.BRIDGE_SECRET,
-          zalo_data: req.body
+            process.env.BRIDGE_SECRET,
+
+          zalo_data:
+            req.body
         })
       }
     );
 
-    const result = await response.text();
+    const result =
+      await response.text();
 
     return res.status(200).json({
       ok: true,
       forwarded: true,
-      appsScriptStatus: response.status,
-      result
+      appsScriptStatus:
+        response.status,
+      result: result
     });
 
   } catch (error) {
+
     console.error(error);
 
     return res.status(500).json({
       ok: false,
-      error: "Failed to forward request"
+      error:
+        "Failed to forward request"
     });
   }
 }
